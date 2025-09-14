@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ecf0f1;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .not-diabetic {
+            background-color: #d5f4e6;
+            color: #27ae60;
+            border: 2px solid #2ecc71;
+        }
+
+        .diabetic {
+            background-color: #fadbd8;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .error {
+            background-color: #fadbd8;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background-color: #e8f4fd;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            color: #2c3e50;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩺 Diabetes Prediction System</h1>
+            <p>Enter your health information to predict diabetes risk</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 Required Information:</h3>
+            <ul>
+                <li><strong>Pregnancies:</strong> Number of times pregnant</li>
+                <li><strong>Glucose:</strong> Plasma glucose concentration (mg/dL)</li>
+                <li><strong>Blood Pressure:</strong> Diastolic blood pressure (mm Hg)</li>
+                <li><strong>Skin Thickness:</strong> Triceps skin fold thickness (mm)</li>
+                <li><strong>Insulin:</strong> 2-Hour serum insulin (mu U/ml)</li>
+                <li><strong>BMI:</strong> Body mass index (kg/m²)</li>
+                <li><strong>Diabetes Pedigree:</strong> Diabetes pedigree function</li>
+                <li><strong>Age:</strong> Age in years</li>
+            </ul>
+        </div>
+
+        <form action="/predict" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pregnancies">Pregnancies</label>
+                    <input type="number" id="pregnancies" name="pregnancies" min="0" max="20" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="glucose">Glucose (mg/dL)</label>
+                    <input type="number" id="glucose" name="glucose" min="0" max="300" step="1" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="blood_pressure">Blood Pressure (mm Hg)</label>
+                    <input type="number" id="blood_pressure" name="blood_pressure" min="0" max="150" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="skin_thickness">Skin Thickness (mm)</label>
+                    <input type="number" id="skin_thickness" name="skin_thickness" min="0" max="100" step="1" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="insulin">Insulin (mu U/ml)</label>
+                    <input type="number" id="insulin" name="insulin" min="0" max="1000" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="bmi">BMI (kg/m²)</label>
+                    <input type="number" id="bmi" name="bmi" min="10" max="70" step="0.1" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="diabetes_pedigree">Diabetes Pedigree Function</label>
+                    <input type="number" id="diabetes_pedigree" name="diabetes_pedigree" min="0" max="3" step="0.001" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age (years)</label>
+                    <input type="number" id="age" name="age" min="0" max="120" step="1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">🔍 Predict Diabetes Risk</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result {{ result_class }}">
+            {{ prediction }}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
